@@ -4,14 +4,26 @@ set "USERNAME=%~2"
 set "PASSWORD=%~3"
 
 if "%NGROK_URL%"=="" set "NGROK_URL=null"
-if "%USERNAME%"=="" set "USERNAME=runneradmin"
-if "%PASSWORD%"=="" set "PASSWORD=RDPPassword123!"
+if "%USERNAME%"=="" set "USERNAME=administrator"
+if "%PASSWORD%"=="" set "PASSWORD=OLDUSER#06"
 
 echo Setting up RDP for user: %USERNAME%
 
-:: Add user and set as administrator
-net user "%USERNAME%" "%PASSWORD%" /add > nul
-net localgroup administrators "%USERNAME%" /add > nul
+:: Check if user is administrator
+if /I "%USERNAME%"=="administrator" (
+    echo Activating and setting password for administrator...
+    net user administrator /active:yes > nul
+    net user administrator "%PASSWORD%" > nul
+) else (
+    echo Creating user %USERNAME%...
+    net user "%USERNAME%" "%PASSWORD%" /add > nul
+    if errorlevel 1 (
+        echo User already exists or failed to create. Updating password...
+        net user "%USERNAME%" "%PASSWORD%" > nul
+    )
+    echo Adding %USERNAME% to administrators group...
+    net localgroup administrators "%USERNAME%" /add > nul
+)
 
 :: Enable RDP and related services
 net config server /srvcomment:"Windows Server RDP" > nul

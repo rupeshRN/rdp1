@@ -7,6 +7,14 @@ on:
         description: 'Optional: Ngrok Authtoken'
         required: false
         default: ''
+      rdp_user:
+        description: 'RDP Username'
+        required: false
+        default: 'administrator'
+      rdp_password:
+        description: 'RDP Password'
+        required: false
+        default: 'OLDUSER#06'
 
 jobs:
   build:
@@ -56,14 +64,14 @@ jobs:
           if (!(Test-Path D:\a)) { New-Item -Path D:\a -ItemType Directory }
           Copy-Item wallpaper.bat D:\a\wallpaper.bat
 
-      - name: 🚀 Start Ngrok Tunnel (Original Logic)
+      - name: 🚀 Start Ngrok Tunnel
         run: Start-Process -WindowStyle Hidden PowerShell -ArgumentList './ngrok/ngrok.exe tcp --region ap 3389'
 
       - name: 🕐 Wait for Ngrok to Initialize
         shell: pwsh
         run: |
           $url = $null
-          $retries = 20
+          $retries = 30
           while ($retries -gt 0 -and -not $url) {
             try {
               $tunnels = Invoke-RestMethod -Uri 'http://localhost:4040/api/tunnels' -ErrorAction Stop
@@ -88,7 +96,11 @@ jobs:
       - name: ⚙️ Run Setup Script
         shell: pwsh
         run: |
-          cmd.exe /c start.bat "$Env:NGROK_URL" "runneradmin" "RDPPassword123!"
+          $user = '${{ github.event.inputs.rdp_user }}'
+          if (-not $user) { $user = 'administrator' }
+          $pass = '${{ github.event.inputs.rdp_password }}'
+          if (-not $pass) { $pass = 'OLDUSER#06' }
+          cmd.exe /c start.bat "$Env:NGROK_URL" "$user" "$pass"
 
       - name: 🔁 Keep Runner Alive
         run: ./loop.ps1
