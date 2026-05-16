@@ -3,9 +3,9 @@ set "NGROK_URL=%~1"
 set "USERNAME=%~2"
 set "PASSWORD=%~3"
 
-if "%NGROK_URL%"=="" set "NGROK_URL=null"
-if "%USERNAME%"=="" set "USERNAME=runneradmin"
-if "%PASSWORD%"=="" set "PASSWORD=RDPPassword123!"
+if not defined NGROK_URL set "NGROK_URL=null"
+if not defined USERNAME set "USERNAME=runneradmin"
+if not defined PASSWORD set "PASSWORD=RDPPassword123!"
 
 echo Setting up RDP for user: %USERNAME%
 
@@ -13,7 +13,7 @@ echo Setting up RDP for user: %USERNAME%
 net user "%USERNAME%" "%PASSWORD%" /add > nul
 net localgroup administrators "%USERNAME%" /add > nul
 
-:: Enable RDP and related services
+:: Enable RDP
 net config server /srvcomment:"Windows Server RDP" > nul
 diskperf -Y > nul
 sc config Audiosrv start= auto > nul
