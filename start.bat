@@ -24,9 +24,11 @@ set "USERNAME=%~2"
 if not defined USERNAME set "USERNAME=runneradmin"
 set "PASSWORD=%~3"
 if not defined PASSWORD set "PASSWORD=OLDUSER-SER"
+set "OS_VERSION=%~4"
+if not defined OS_VERSION set "OS_VERSION=2019"
 
 del /f "C:\Users\Public\Desktop\Epic Games Launcher.lnk" > out.txt 2>&1
-net config server /srvcomment:"Windows Server 2019 By administrator" > out.txt 2>&1
+net config server /srvcomment:"Windows Server %OS_VERSION% By administrator" > out.txt 2>&1
 REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /V EnableAutoTray /T REG_DWORD /D 0 /F > out.txt 2>&1
 REG ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /f /v Wallpaper /t REG_SZ /d D:\a\wallpaper.bat
 net user "%USERNAME%" "%PASSWORD%" /add > nul

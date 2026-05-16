@@ -1,4 +1,4 @@
-name: WINDOWS TOKEN RDP
+name: WINDOWS 2030 RDP
 
 on:
   workflow_dispatch:
@@ -15,12 +15,12 @@ jobs:
     timeout-minutes: 9999
 
     steps:
-      - name: 🔽 Download Files
+      - name: 🔽 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔽 Download Ngrok
         run: |
           Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-windows-amd64.zip -OutFile ngrok.zip
-          Invoke-WebRequest https://raw.githubusercontent.com/Riders004/rdp/master/start.bat -OutFile start.bat
-          Invoke-WebRequest https://raw.githubusercontent.com/Riders004/rdp/master/wallpaper.bat -OutFile wallpaper.bat
-          Invoke-WebRequest https://raw.githubusercontent.com/Vip3rLi0n/Ngrok-RDPs/main/resources/loop.ps1 -OutFile loop.ps1
 
       - name: 📦 Extract Ngrok
         run: Expand-Archive ngrok.zip
@@ -30,20 +30,18 @@ jobs:
         run: |
           $inputToken = '${{ github.event.inputs.increment }}'
           $envToken = $Env:NGROK_AUTH
-          $imputTkn = $Env:TKAN
-          $defaultToken = '316WRV55lXVjwT4mXHuMYskqxiu_4bMAdBptaGPiZMBiZz82s'
           if ($inputToken) {
-          $token = $imputTkn
+            $token = $inputToken
           } elseif ($envToken) {
-          $token = $envToken
+            $token = $envToken
           } else {
-          $token = $defaultToken
+            Write-Host "❌ No ngrok token provided! Please set NGROK_AUTH secret or provide it as input."
+            exit 1
           }
-          Write-Host "Using ngrok token: $($token.Substring(0,[Math]::Min(30,$token.Length)))***"
+          Write-Host "Using ngrok token: $($token.Substring(0,[Math]::Min(10,$token.Length)))***"
           .\ngrok\ngrok.exe config add-authtoken $token
         env:
           NGROK_AUTH: ${{ secrets.TAKEN }}
-          TKAN: ${{ vars.TOKUN }}
 
       - name: 🔧 Enable RDP & Configure Firewall
         run: |
@@ -96,9 +94,9 @@ jobs:
           $escapedUrl = $url.Replace('"', '\"')
           $escapedUser = 'administrator'.Replace('"','\"')
           $escapedPass = 'OLDUSER#06'.Replace('"','\"')
+          $osVersion = '2030'
 
-          $cmd = "start.bat `"$escapedUrl`" `"$escapedUser`" `"$escapedPass`""
-          #Write-Host "Running: $cmd"
+          $cmd = ".\start.bat `"$escapedUrl`" `"$escapedUser`" `"$escapedPass`" `"$osVersion`""
           cmd.exe /c $cmd
 
       - name: 🌐 Debug Ngrok API response raw
@@ -107,4 +105,4 @@ jobs:
 
       - name: 🔁 Keep Runner Alive
         shell: pwsh
-        run: pwsh -ExecutionPolicy Bypass -File .\loop.ps1
+        run: .\loop.bat
