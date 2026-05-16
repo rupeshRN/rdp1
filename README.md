@@ -1,35 +1,29 @@
-# Windows RDP on GitHub Actions
+# FreeRDP
 
-This repository provides a way to set up a Windows Remote Desktop (RDP) environment using GitHub Actions and Ngrok.
 
-## Prerequisites
+- Free Windows RDP 6 Hours
 
-1.  **Ngrok Account:** Sign up at [ngrok.com](https://dashboard.ngrok.com/signup).
-2.  **Authtoken:** Get your authtoken from [dashboard.ngrok.com/auth/your-authtoken](https://dashboard.ngrok.com/auth/your-authtoken).
+- Create RDP Windows 10 Ram 7GB 2 Core Cpu With Github:
 
-## Setup Instructions
+- Press the Fork Button to make RDP (For Android/HP Users Please Use Desktop Mode).
 
-1.  **Fork this Repository.**
-2.  **Add NGROK_AUTH Secret:**
-    *   Go to **Settings** > **Secrets and variables** > **Actions**.
-    *   Click **New repository secret**.
-    *   Name: `NGROK_AUTH`
-    *   Value: Paste your Ngrok Authtoken.
-3.  **Run the Workflow:**
-    *   Go to the **Actions** tab.
-    *   Select either **WINDOWS LATEST RDP** or **WINDOWS 2025 RDP**.
-    *   Click **Run workflow**.
-4.  **Connect:**
-    *   Once the workflow starts, check the logs for the `⚙️ Run Setup Script` step.
-    *   It will display the **Ngrok Public URL**, **Username**, and **Password**.
-    *   Use any RDP client to connect using the provided URL.
+- visit https://dashboard.ngrok.com to get NGROK_AUTH_TOKEN
 
-## Security & Usage Notice
+- Inside this Repo Go to Settings > Secrets > New repository secret
 
-*   **ToS Compliance:** Using GitHub Actions for general-purpose RDP sessions may violate GitHub's Acceptable Use Policy. Use this for development and testing purposes only.
-*   **Security:** This version has been cleaned of obfuscated scripts and suspicious system modifications found in previous versions.
-*   **Timeouts:** Workflows are set to a maximum of 6 hours (360 minutes).
+- Fill Name: Enter NGROK_AUTH_TOKEN
 
-## Disclaimer
+- Fill Value: Visit https://dashboard.ngrok.com/auth/your-authtoken Copy and Paste in the value
 
-This project is for educational purposes. The maintainer is not responsible for any misuse or account suspensions resulting from using this repository.
+- Press Add secret
+
+- Go to Action <Click Select workflow< Select Har Pito, Press Run workflow
+
+- Refresh the Web/page and go to Har Pito > click build
+
+- Wait 1-5 minutes
+
+- Press the down arrow button that says (Connect RDP.) to get IP, User, Password.
+
+
+Warning if Rdp close please click Action<Select Har Pito<Click build, Click on the three dots click run-rensjob and run the Rdp again
